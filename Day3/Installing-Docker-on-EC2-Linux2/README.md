@@ -74,7 +74,7 @@ sudo usermod -a -G docker ec2-user
 newgrp docker
 ```
 
-- Check the docker version without `sudo`.
+- Check the docker version without **`sudo`.**
 
 ```bash
 docker version
