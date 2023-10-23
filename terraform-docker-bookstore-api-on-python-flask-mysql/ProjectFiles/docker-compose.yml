@@ -1,0 +1,51 @@
+version: "3.7"
+services:  # Buraya oluşturacağımız containerleri yazıyoruz biz 2 tane container(mysql-myapp) oluşturacağız
+  database:
+    image: mysql:5.7
+    container_name: database
+    environment:
+      - MYSQL_ROOT_PASSWORD: K.123456
+      - MYSQL_DATABASE: bookstore_db
+      - MYSQL_USER: knnklc
+      - MYSQL_PASSWORD: Knnklc.1
+    networks:
+      - bookstore-networks
+  my_app:
+    build: .      # Dockefile dan image oluşturacak
+    image: kenanklc/bookstore-api:latest
+    container_name: my_app
+    restart: always
+    depends_on:
+      - database  # Önce image'i mysql olan database containeri çalışacak daha sonra my_app container çalışacaktır. Kısacası çalışması database bağlı database çalışmadan çalışmaz anlamına geliyor.
+    ports:
+      - "80:80"
+    networks:
+      - bookstore-networks
+networks:
+  bookstore-networks:
+    driver: bridge
+
+
+
+
+# Verdiğiniz metin, bir Docker Compose dosyasına benziyor. Docker Compose, birden çok Docker konteynerini tek bir yapılandırma dosyasıyla yönetmeye yardımcı olan bir araçtır. Docker Compose dosyası, bir uygulamanın tüm bileşenlerini (örneğin, veritabanı, uygulama sunucusu vb.) tanımlar ve bu bileşenlerin nasıl birbirine bağlanacağını ve çalıştırılacağını belirtir.
+
+# Aşağıda verilen Docker Compose dosyasının her bir bölümünün açıklamaları:
+
+# my_app (servis adı): Bu, bir Docker servisi veya konteynerini tanımlar. Bu, uygulamanın belirli bir bölümünü temsil eder.
+
+# build: .: Bu, Dockerfile adlı bir dosyanın mevcut dizinde bulunduğunu ve bu Dockerfile'ı kullanarak bir Docker imajı oluşturmanız gerektiğini belirtir. Yani, . dizinindeki Dockerfile kullanılarak bir imaj oluşturulur.
+
+# image: kenanklc/bookstore-api:latest: Bu, önceden oluşturulmuş bir Docker imajını kullanmak yerine kenanklc/bookstore-api adlı bir Docker imajını kullanmanız gerektiğini belirtir. latest, imajın en son sürümünü kullanmanızı sağlar.
+
+# container_name: my_app: Bu, bu belirli konteynere bir ad verir. Bu adı kullanarak konteyneri yönetebilirsiniz.
+
+# restart: always: Bu, konteynerin her zaman (herhangi bir hata durumunda) otomatik olarak yeniden başlatılmasını sağlar.
+
+# depends_on: database: Bu, my_app konteynerinin önce database adlı bir başka konteynerin başlamasını beklemesi gerektiğini belirtir. Bu, uygulamanızın veritabanı bağlantısının hazır olduğundan emin olur.
+
+# ports: - "8080:80": Bu, 8080 numaralı yerel portun 80 numaralı konteyner portuna yönlendirilmesini belirtir. Bu, dış dünyadan uygulamanıza erişim sağlar.
+
+# networks: - bookstore-networks: Bu, bookstore-networks adlı bir Docker ağına konteynerin bağlanmasını sağlar. Bu, konteynerler arasında iletişim kurmanızı sağlar.
+
+# Bu Docker Compose dosyası, Docker konteynerlerini oluşturur ve bunları belirtilen şekilde yapılandırır. Bu, çoklu konteyner uygulamalarını daha kolay yönetmek ve çalıştırmak için oldukça kullanışlıdır.
